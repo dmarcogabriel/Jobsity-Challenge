@@ -6,10 +6,20 @@ import {getSeries, selectSeries} from '@app/store/series';
 import styled from 'styled-components/native';
 import SerieItem from './SerieItem';
 import SearchSeriesInput from './SearchSeriesInput';
+import {HomeStack} from '@app/constants/RouteNames';
+import {IHomeStackParamsList} from '@app/interfaces/NavigationInterfaces';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+
+type INavigation = NativeStackNavigationProp<
+  IHomeStackParamsList,
+  HomeStack.Home
+>;
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
   const {list} = useAppSelector(selectSeries);
+  const navigation = useNavigation<INavigation>();
 
   useEffect(() => {
     dispatch(getSeries());
@@ -20,7 +30,7 @@ export default function HomeScreen() {
   };
 
   const handleGoToDetails = (id: number) => {
-    // TODO: navigate to details
+    navigation.navigate(HomeStack.SerieDetails, {id});
   };
 
   return (
