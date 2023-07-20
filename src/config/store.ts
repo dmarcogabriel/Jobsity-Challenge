@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 
 import series from '@app/store/series';
+import showDetails from '@app/store/showDetails';
 
 const store = configureStore({
   reducer: {
     series,
+    showDetails,
   },
 });
 

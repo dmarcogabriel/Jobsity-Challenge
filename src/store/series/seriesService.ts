@@ -4,9 +4,6 @@ import {ISerie} from '@app/interfaces/SerieInterface';
 type IGetSeriesPayload = {
   search?: string;
 };
-type IGetSerieDetailsByIdPayload = {
-  id: string;
-};
 
 export const getSeries = async (payload: IGetSeriesPayload = {}) => {
   try {
@@ -14,18 +11,6 @@ export const getSeries = async (payload: IGetSeriesPayload = {}) => {
     const {data} = await api.get<ISerie[]>('search/shows', {
       params: {q: query},
     });
-
-    return data;
-  } catch (e) {
-    throw new Error('');
-  }
-};
-
-export const getSerieDetailsById = async (
-  payload: IGetSerieDetailsByIdPayload,
-) => {
-  try {
-    const {data} = await api.get<ISerie>(`shows/${payload.id}`);
 
     return data;
   } catch (e) {
