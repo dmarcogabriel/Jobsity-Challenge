@@ -1,6 +1,8 @@
 import {useEffect} from 'react';
 import styled from 'styled-components/native';
+import {Text} from 'react-native-paper';
 import {RouteProp, useRoute} from '@react-navigation/native';
+
 import {useAppDispatch} from '@app/hooks/useAppDispatch';
 import {useAppSelector} from '@app/hooks/useAppSelector';
 import {
@@ -11,11 +13,14 @@ import {
 } from '@app/store/showDetails';
 import {IHomeStackParamsList} from '@app/interfaces/NavigationInterfaces';
 import {HomeStack} from '@app/constants/RouteNames';
-import {Text} from 'react-native-paper';
+import {Loading} from '@app/components/Loading';
+import {htmlParse} from '@app/utils/htmlParser';
+
 import SeasonItem from './SeasonItem';
 
 export default function SerieDetails() {
   const dispatch = useAppDispatch();
+  // todo: add error and loading
   const {show, isLoading, hasError, isLoadingSeason, seasons, episodes} =
     useAppSelector(selectShowDetails);
   const route =
@@ -27,8 +32,6 @@ export default function SerieDetails() {
     dispatch(getSeasonsByShowId({id}));
     dispatch(getEpisodesBySeasonId({id}));
   }, [dispatch, route.params]);
-
-  console.log(show);
 
   return (
     <Container>
@@ -47,7 +50,10 @@ export default function SerieDetails() {
                   show.schedule.time
                 }`}</Text>
               )}
-              {show.summary && <Text>{`Summary: ${show.summary}`}</Text>}
+              {!!show.genres.length && <Text>{show.genres.join(', ')}</Text>}
+              {show.summary && (
+                <Text>{`Summary: ${htmlParse(show.summary)}`}</Text>
+              )}
             </>
           )}
           {seasons?.map(season => (
@@ -64,8 +70,6 @@ export default function SerieDetails() {
 }
 
 const Container = styled.View``;
-
-const Loading = styled.ActivityIndicator``;
 
 const Content = styled.ScrollView``;
 

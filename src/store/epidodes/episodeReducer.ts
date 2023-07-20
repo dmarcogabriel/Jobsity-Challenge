@@ -5,7 +5,7 @@ import {IEpisode} from '@app/interfaces/EpisodeInterface';
 type IEpisodeState = {
   isLoading: boolean;
   hasError: boolean;
-  episodes?: IEpisode;
+  episode?: IEpisode;
 };
 
 const initialState: IEpisodeState = {

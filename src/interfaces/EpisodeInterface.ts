@@ -7,4 +7,5 @@ export type IEpisode = {
   image: IImage;
   season: number;
   runtime: number;
+  summary: string;
 };
