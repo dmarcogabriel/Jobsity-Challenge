@@ -19,6 +19,7 @@ import {htmlParse} from '@app/utils/htmlParser';
 import PosterPlaceholderImg from '@app/assets/image-placeholder.png';
 
 import SeasonItem from './SeasonItem';
+import BookmarkButton from './BookmarkButton';
 
 export default function SerieDetails() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,8 @@ export default function SerieDetails() {
     useAppSelector(selectShowDetails);
   const route =
     useRoute<RouteProp<IHomeStackParamsList, HomeStack.SerieDetails>>();
+
+  const {serie} = route.params;
 
   const loadData = useCallback(
     async (id: number) => {
@@ -37,13 +40,11 @@ export default function SerieDetails() {
   );
 
   useEffect(() => {
-    const {id} = route.params;
-    loadData(id);
-  }, [route.params, loadData]);
+    loadData(serie.show.id);
+  }, [serie, loadData]);
 
   const handleError = () => {
-    const {id} = route.params;
-    loadData(id);
+    loadData(serie.show.id);
   };
 
   return (
@@ -58,8 +59,9 @@ export default function SerieDetails() {
                   ? {uri: show?.image?.original}
                   : PosterPlaceholderImg
               }
-              resizeMode="contain"
-            />
+              resizeMode="contain">
+              <BookmarkButton serie={serie} />
+            </Poster>
             <Content>
               <Text variant="displayLarge">{show.name}</Text>
               {!!show.schedule.days.length && (
@@ -103,7 +105,7 @@ const Content = styled.View`
   padding: 16px;
 `;
 
-const Poster = styled.Image`
+const Poster = styled.ImageBackground`
   width: 100%;
   height: 220px;
   background: #333;

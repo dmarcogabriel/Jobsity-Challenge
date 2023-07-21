@@ -1,9 +1,12 @@
 import {createReducer} from '@reduxjs/toolkit';
+
+import {ISerie} from '@app/interfaces/SerieInterface';
+
 import * as BookmarkActions from './bookmarkActions';
 
 type IBookmarkState = {
   isLoading: boolean;
-  list: number[];
+  list: ISerie[];
   hasError: boolean;
 };
 
@@ -36,17 +39,19 @@ export const bookmarkReducer = createReducer(initialValues, builder => {
     hasError: true,
   }));
 
-  builder.addCase(BookmarkActions.bookmarkSerie.pending, state => ({
-    ...state,
-    hasError: false,
-  }));
+  builder.addCase(
+    BookmarkActions.bookmarkSerie.fulfilled,
+    (state, {payload}) => ({
+      ...state,
+      list: payload,
+    }),
+  );
 
-  builder.addCase(BookmarkActions.bookmarkSerie.fulfilled, state => ({
-    ...state,
-  }));
-
-  builder.addCase(BookmarkActions.bookmarkSerie.rejected, state => ({
-    ...state,
-    hasError: true,
-  }));
+  builder.addCase(
+    BookmarkActions.removeBookmark.fulfilled,
+    (state, {payload}) => ({
+      ...state,
+      list: payload,
+    }),
+  );
 });

@@ -10,3 +10,8 @@ export const getBookmarks = createAsyncThunk(
   'bookmarks/getBookmarks',
   BookmarkService.getBookmarks,
 );
+
+export const removeBookmark = createAsyncThunk(
+  'bookmarks/removeBookmark',
+  BookmarkService.removeBookmark,
+);
