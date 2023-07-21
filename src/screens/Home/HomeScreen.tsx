@@ -10,6 +10,7 @@ import {getSeries, selectSeries} from '@app/store/series';
 import {HomeStack} from '@app/constants/RouteNames';
 import {IHomeStackParamsList} from '@app/interfaces/NavigationInterfaces';
 import {LoadingPage} from '@app/components/Loading';
+import {Snackbar} from '@app/components/Snackbar';
 
 import SerieItem from './SerieItem';
 import SearchSeriesInput from './SearchSeriesInput';
@@ -21,7 +22,7 @@ type INavigation = NativeStackNavigationProp<
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
-  const {list, isLoading} = useAppSelector(selectSeries);
+  const {list, isLoading, hasError} = useAppSelector(selectSeries);
   const navigation = useNavigation<INavigation>();
 
   useEffect(() => {
@@ -36,20 +37,29 @@ export default function HomeScreen() {
     navigation.navigate(HomeStack.SerieDetails, {id});
   };
 
+  const handleError = () => {
+    dispatch(getSeries());
+  };
+
   return (
-    <Container>
-      <SearchWrapper>
-        <SearchSeriesInput onSearch={handleSearch} isDisabled={isLoading} />
-      </SearchWrapper>
-      {isLoading && <LoadingPage />}
-      <SerieList
-        data={list}
-        keyExtractor={serie => String(serie.show.id)}
-        renderItem={({item: serie}) => (
-          <SerieItem serie={serie} onGoToDetails={handleGoToDetails} />
-        )}
-      />
-    </Container>
+    <>
+      <Container>
+        <SearchWrapper>
+          <SearchSeriesInput onSearch={handleSearch} isDisabled={isLoading} />
+        </SearchWrapper>
+        {isLoading && <LoadingPage />}
+        <SerieList
+          data={list}
+          keyExtractor={serie => String(serie.show.id)}
+          renderItem={({item: serie}) => (
+            <SerieItem serie={serie} onGoToDetails={handleGoToDetails} />
+          )}
+        />
+      </Container>
+      <Snackbar visible={hasError} onDismiss={handleError}>
+        Ops, Failed to load series.
+      </Snackbar>
+    </>
   );
 }
 

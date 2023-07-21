@@ -14,8 +14,8 @@ type IShowDetailsState = {
 
 const initialState: IShowDetailsState = {
   isLoading: true,
-  isLoadingSeason: true,
-  isLoadingEpisodes: true,
+  isLoadingSeason: false,
+  isLoadingEpisodes: false,
   hasError: false,
 };
 
