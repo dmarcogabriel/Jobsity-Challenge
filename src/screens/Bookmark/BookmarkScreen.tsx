@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useMemo} from 'react';
 import styled from 'styled-components/native';
 import {FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -36,12 +36,24 @@ export default function BookmarkScreen() {
     dispatch(getBookmarks());
   };
 
+  const sortedList = useMemo(() => {
+    return [...list].sort((a, b) => {
+      if (a.show.name.toLowerCase() < b.show.name.toLowerCase()) {
+        return -1;
+      }
+      if (a.show.name.toLowerCase() > b.show.name.toLowerCase()) {
+        return 1;
+      }
+      return 0;
+    });
+  }, [list]);
+
   return (
     <>
       <Container>
         {isLoading && <LoadingPage />}
         <SerieList
-          data={list}
+          data={sortedList}
           keyExtractor={serie => String(serie.show.id)}
           renderItem={({item: serie}) => (
             <SerieItem serie={serie} onGoToDetails={handleGoToShow} />
