@@ -19,6 +19,8 @@ $ yarn install
 
 ## Running the app
 
+> Note: Before running the app, rename `.env.sample` to `.env`.
+
 ```bash
 # start the local bundle
 $ yarn start
