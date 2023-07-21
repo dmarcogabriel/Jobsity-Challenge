@@ -9,8 +9,10 @@ type IGetShowDetailsByIdPayload = {
 type IGetSeasonsShowByIdPayload = {
   id: number;
 };
+type IGetSeasonsShowByIdResponse = Omit<ISeason, 'episodes'>[];
 type IGetEpisodesBySeasonIdPayload = {
   id: number;
+  season: number;
 };
 
 export const getShowDetailsById = async (
@@ -29,7 +31,9 @@ export const getSeasonsShowById = async (
   payload: IGetSeasonsShowByIdPayload,
 ) => {
   try {
-    const {data} = await api.get<ISeason[]>(`shows/${payload.id}/seasons`);
+    const {data} = await api.get<IGetSeasonsShowByIdResponse>(
+      `shows/${payload.id}/seasons`,
+    );
 
     return data;
   } catch (e) {
@@ -41,9 +45,9 @@ export const getEpisodesByShowId = async (
   payload: IGetEpisodesBySeasonIdPayload,
 ) => {
   try {
-    const {data} = await api.get<IEpisode[]>(`shows/${payload.id}/episodes`);
+    const {data} = await api.get<IEpisode[]>(`seasons/${payload.id}/episodes`);
 
-    return data;
+    return {episodes: data, season: payload.season};
   } catch (e) {
     throw new Error('');
   }

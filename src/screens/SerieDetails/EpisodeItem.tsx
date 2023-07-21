@@ -1,6 +1,4 @@
-import styled from 'styled-components/native';
-import {Text} from 'react-native-paper';
-import {TouchableOpacity} from 'react-native';
+import {List} from 'react-native-paper';
 import {IEpisode} from '@app/interfaces/EpisodeInterface';
 
 type IProps = {
@@ -12,18 +10,10 @@ export default function EpisodeItem({episode, onGoToEpisode}: IProps) {
   const handleGoToEpisode = () => onGoToEpisode(episode.id);
 
   return (
-    <TouchableOpacity onPress={handleGoToEpisode}>
-      <EpisodeWrapper>
-        <Text>{episode.name}</Text>
-        {episode.runtime && <Text>{`${episode.runtime}m`}</Text>}
-      </EpisodeWrapper>
-    </TouchableOpacity>
+    <List.Item
+      onPress={handleGoToEpisode}
+      title={`${episode.number || 'Special'} - ${episode.name}`}
+      description={episode.runtime ? `${episode.runtime}m` : ''}
+    />
   );
 }
-
-const EpisodeWrapper = styled.View`
-  padding: 16px 16px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;

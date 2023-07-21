@@ -8,8 +8,9 @@ import {HomeStack} from '@app/constants/RouteNames';
 import {useAppDispatch} from '@app/hooks/useAppDispatch';
 import {useAppSelector} from '@app/hooks/useAppSelector';
 import {selectEpisodes, getEpisodeById} from '@app/store/epidodes';
-import {Loading} from '@app/components/Loading';
+import {LoadingPage} from '@app/components/Loading';
 import {htmlParse} from '@app/utils/htmlParser';
+import PosterPlaceholderImg from '@app/assets/image-placeholder.png';
 
 export default function EpisodeDetails() {
   const dispatch = useAppDispatch();
@@ -25,19 +26,23 @@ export default function EpisodeDetails() {
 
   return (
     <Container>
-      {isLoading && <Loading />}
+      {isLoading && <LoadingPage />}
       {!isLoading && !!episode && (
         <>
-          {episode.image && (
-            <Image
-              source={{uri: episode.image.original}}
-              resizeMode="contain"
-            />
-          )}
+          <Image
+            source={
+              episode.image
+                ? {uri: episode.image.original}
+                : PosterPlaceholderImg
+            }
+            resizeMode="contain"
+          />
           <Content>
-            <Text>{`E${episode.number}S${episode.season}`}</Text>
-            <Text>{episode.name}</Text>
-            <Text>{`Summary: ${htmlParse(episode.summary)}`}</Text>
+            <Text variant="displayMedium">{episode.name}</Text>
+            <EpisodeNumber variant="bodySmall">{`E${episode.number}S${episode.season}`}</EpisodeNumber>
+            <Text variant="bodyLarge">{`Summary: ${htmlParse(
+              episode.summary,
+            )}`}</Text>
           </Content>
         </>
       )}
@@ -45,7 +50,7 @@ export default function EpisodeDetails() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.ScrollView``;
 
 const Content = styled.View`
   padding: 16px;
@@ -55,4 +60,8 @@ const Image = styled.Image`
   width: 100%;
   height: 210px;
   background: #333;
+`;
+
+const EpisodeNumber = styled(Text)`
+  margin: 8px 0;
 `;

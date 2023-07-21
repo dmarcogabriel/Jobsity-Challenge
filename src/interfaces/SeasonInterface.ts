@@ -1,3 +1,4 @@
+import {IEpisode} from './EpisodeInterface';
 import {IImage} from './ImageInterface';
 
 export type ISeason = {
@@ -6,4 +7,5 @@ export type ISeason = {
   season: number;
   number: number;
   image: IImage;
+  episodes: IEpisode[];
 };

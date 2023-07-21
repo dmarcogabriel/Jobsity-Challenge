@@ -1,15 +1,18 @@
 import {useEffect} from 'react';
 import {FlatList} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import styled from 'styled-components/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 import {useAppDispatch} from '@app/hooks/useAppDispatch';
 import {useAppSelector} from '@app/hooks/useAppSelector';
 import {getSeries, selectSeries} from '@app/store/series';
-import styled from 'styled-components/native';
-import SerieItem from './SerieItem';
-import SearchSeriesInput from './SearchSeriesInput';
 import {HomeStack} from '@app/constants/RouteNames';
 import {IHomeStackParamsList} from '@app/interfaces/NavigationInterfaces';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
+import {LoadingPage} from '@app/components/Loading';
+
+import SerieItem from './SerieItem';
+import SearchSeriesInput from './SearchSeriesInput';
 
 type INavigation = NativeStackNavigationProp<
   IHomeStackParamsList,
@@ -18,7 +21,7 @@ type INavigation = NativeStackNavigationProp<
 
 export default function HomeScreen() {
   const dispatch = useAppDispatch();
-  const {list} = useAppSelector(selectSeries);
+  const {list, isLoading} = useAppSelector(selectSeries);
   const navigation = useNavigation<INavigation>();
 
   useEffect(() => {
@@ -35,7 +38,10 @@ export default function HomeScreen() {
 
   return (
     <Container>
-      <SearchSeriesInput onSearch={handleSearch} />
+      <SearchWrapper>
+        <SearchSeriesInput onSearch={handleSearch} isDisabled={isLoading} />
+      </SearchWrapper>
+      {isLoading && <LoadingPage />}
       <SerieList
         data={list}
         keyExtractor={serie => String(serie.show.id)}
@@ -47,6 +53,14 @@ export default function HomeScreen() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.View`
+  padding: 16px;
+`;
 
-const SerieList = styled.FlatList`` as unknown as typeof FlatList;
+const SearchWrapper = styled.View`
+  margin-bottom: 16px;
+`;
+
+const SerieList = styled.FlatList`
+  margin-bottom: 58px;
+` as unknown as typeof FlatList;

@@ -2,7 +2,6 @@ import {createReducer} from '@reduxjs/toolkit';
 import * as SerieDetailsActions from './showDetailsActions';
 import {IShow} from '@app/interfaces/ShowInterface';
 import {ISeason} from '@app/interfaces/SeasonInterface';
-import {IEpisode} from '@app/interfaces/EpisodeInterface';
 
 type IShowDetailsState = {
   isLoading: boolean;
@@ -11,7 +10,6 @@ type IShowDetailsState = {
   isLoadingEpisodes: boolean;
   show?: IShow;
   seasons?: ISeason[];
-  episodes?: IEpisode[];
 };
 
 const initialState: IShowDetailsState = {
@@ -56,7 +54,7 @@ export const showDetailsReducer = createReducer(initialState, builder => {
     (state, {payload}) => ({
       ...state,
       isLoadingSeason: false,
-      seasons: payload,
+      seasons: payload.map(season => ({...season, episodes: []})),
     }),
   );
 
@@ -70,16 +68,23 @@ export const showDetailsReducer = createReducer(initialState, builder => {
     ...state,
     isLoadingEpisodes: true,
     hasError: false,
-    episodes: [],
   }));
 
   builder.addCase(
     SerieDetailsActions.getEpisodesBySeasonId.fulfilled,
-    (state, {payload}) => ({
-      ...state,
-      isLoadingEpisodes: false,
-      episodes: payload,
-    }),
+    (state, {payload}) => {
+      const seasons = state.seasons?.map(season => ({
+        ...season,
+        episodes:
+          payload.season === season.number ? payload.episodes : season.episodes,
+      }));
+
+      return {
+        ...state,
+        isLoadingEpisodes: false,
+        seasons,
+      };
+    },
   );
 
   builder.addCase(
