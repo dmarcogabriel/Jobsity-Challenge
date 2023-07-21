@@ -67,7 +67,10 @@ export default function BookmarkScreen() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.View`
+  background: #fff;
+  flex: 1;
+`;
 
 const SerieList = styled.FlatList`
   margin-bottom: 58px;

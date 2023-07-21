@@ -66,12 +66,12 @@ export default function HomeScreen() {
 
 const Container = styled.View`
   padding: 16px;
+  flex: 1;
+  background: #fff;
 `;
 
 const SearchWrapper = styled.View`
   margin-bottom: 16px;
 `;
 
-const SerieList = styled.FlatList`
-  margin-bottom: 58px;
-` as unknown as typeof FlatList;
+const SerieList = styled.FlatList`` as unknown as typeof FlatList;

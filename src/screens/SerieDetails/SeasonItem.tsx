@@ -29,11 +29,11 @@ export default function SeasonItem({season, isExpanded, onExpand}: IProps) {
   const {isLoadingEpisodes} = useAppSelector(selectShowDetails);
 
   useEffect(() => {
-    if (isExpanded && !season.episodes.length && !isLoadingEpisodes) {
+    if (isExpanded) {
       dispatch(getEpisodesBySeasonId({id: season.id, season: season.number}));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isExpanded, season.episodes]);
+  }, [dispatch, isExpanded]);
 
   const handleExpandSession = () => {
     onExpand();
@@ -49,6 +49,9 @@ export default function SeasonItem({season, isExpanded, onExpand}: IProps) {
       expanded={isExpanded}
       onPress={handleExpandSession}>
       {isLoadingEpisodes && <Loading />}
+      {!isLoadingEpisodes && !season.episodes.length && (
+        <List.Item title="No Episodes found :(" />
+      )}
       {season.episodes.map(episode => (
         <EpisodeItem
           key={episode.id}

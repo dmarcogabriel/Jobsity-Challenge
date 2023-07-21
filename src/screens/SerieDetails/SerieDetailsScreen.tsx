@@ -99,7 +99,10 @@ export default function SerieDetails() {
   );
 }
 
-const Container = styled.View``;
+const Container = styled.View`
+  flex: 1;
+  background: #fff;
+`;
 
 const Content = styled.View`
   padding: 16px;

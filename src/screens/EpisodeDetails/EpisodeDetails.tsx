@@ -61,7 +61,10 @@ export default function EpisodeDetails() {
   );
 }
 
-const Container = styled.ScrollView``;
+const Container = styled.ScrollView`
+  background: #fff;
+  flex: 1;
+`;
 
 const Content = styled.View`
   padding: 16px;
